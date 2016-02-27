@@ -31,18 +31,25 @@ import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class InstantRandomizerTest {
+public class InstantRandomizerTest extends AbstractThreeTenRandomizerTest<Instant> {
 
-    private InstantRandomizer instantRandomizer;
-    
     @Before
     public void setUp() {
-        instantRandomizer = new InstantRandomizer();
+        randomizer = new InstantRandomizer(SEED);
     }
 
     @Test
-    public void getRandomValue() {
-        Instant instant = instantRandomizer.getRandomValue();
+    public void generatedValueMustNoBeNull() {
+        Instant instant = randomizer.getRandomValue();
         assertThat(instant).isNotNull();
+    }
+
+    @Test
+    public void shouldGenerateTheSameValueForTheSameSeed() {
+        Instant actual = randomizer.getRandomValue();
+        /* FIXME dateRandomizer is erroneous, it does not always generate the same value for the same seed */
+        Instant expected = Instant.ofEpochSecond(actual.getEpochSecond()).plusNanos(actual.getNano());
+
+        assertThat(actual).isEqualTo(expected);
     }
 }

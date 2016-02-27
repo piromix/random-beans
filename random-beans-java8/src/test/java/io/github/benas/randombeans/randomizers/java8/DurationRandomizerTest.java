@@ -28,21 +28,28 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DurationRandomizerTest {
+public class DurationRandomizerTest extends AbstractThreeTenRandomizerTest<Duration> {
 
-    private DurationRandomizer durationRandomizer;
-    
     @Before
     public void setUp() {
-        durationRandomizer = new DurationRandomizer();
+        randomizer = new DurationRandomizer(SEED);
     }
 
     @Test
-    public void getRandomValue() {
-        Duration duration = durationRandomizer.getRandomValue();
+    public void generatedValueMustNoBeNull() {
+        Duration duration = randomizer.getRandomValue();
         assertThat(duration).isNotNull();
+    }
+
+    @Test
+    public void shouldGenerateTheSameValueForTheSameSeed() {
+        Duration actual = randomizer.getRandomValue();
+        Duration expected = Duration.of(72L, ChronoUnit.HOURS);
+
+        assertThat(actual).isEqualTo(expected);
     }
 }
